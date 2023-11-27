@@ -21,16 +21,14 @@ namespace AirIndia.PageObjects
         }
 
         //Arrange
-        [FindsBy(How = How.Id, Using = "search")]
-        [CacheLookup]//store the element inside the cache memory from page factory.
-        private IWebElement? SearchText { get; set; }
+        [FindsBy(How = How.Id, Using = "mat-radio-2-input")]
+        private IWebElement? TravelOptions { get; set; }
 
-        [FindsBy(How = How.XPath, Using = "//a[text()='Create an Account']")]
-        [CacheLookup]
-        private IWebElement? CreateAccountLink { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@id='From']")]
+        private IWebElement? FromText { get; set; }
 
-        [FindsBy(How = How.Id, Using = "firstname")]
-        private IWebElement? FirstNameText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@id='To']")]
+        private IWebElement? ToText { get; set; }
 
         [FindsBy(How = How.Id, Using = "lastname")]
         private IWebElement? LastNameText { get; set; }
