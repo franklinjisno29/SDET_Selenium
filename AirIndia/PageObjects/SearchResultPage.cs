@@ -1,4 +1,4 @@
-﻿using BunnyCart.Utilities;
+﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
 using System;
@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BunnyCart.PageObjects
+namespace AirIndia.PageObjects
 {
     internal class SearchResultPage : CoreCodes
     {

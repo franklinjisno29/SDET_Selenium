@@ -1,4 +1,4 @@
-﻿using BunnyCart.Utilities;
+﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V117.DOM;
 using OpenQA.Selenium.Support.UI;
@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BunnyCart.PageObjects
+namespace AirIndia.PageObjects
 {
-    internal class BCHomePage : CoreCodes
+    internal class AirIndiaHomePage : CoreCodes
     {
         IWebDriver driver;
-        public BCHomePage(IWebDriver? driver)                               
+        public AirIndiaHomePage(IWebDriver? driver)                               
         {
             this.driver = driver ?? throw new ArgumentException(nameof(driver));//if the driver is null exception thrown
             PageFactory.InitElements(driver, this);//for optimizing the code we write this inside the constructor

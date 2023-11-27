@@ -10,7 +10,7 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using Serilog;
 
-namespace BunnyCart.Utilities
+namespace AirIndia.Utilities
 {
     internal class CoreCodes
     {

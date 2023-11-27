@@ -1,5 +1,5 @@
-﻿using BunnyCart.PageObjects;
-using BunnyCart.Utilities;
+﻿using AirIndia.PageObjects;
+using AirIndia.Utilities;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BunnyCart.TestScripts
+namespace AirIndia.TestScripts
 {
     internal class SearchTests : CoreCodes
     {
@@ -20,7 +20,7 @@ namespace BunnyCart.TestScripts
         {
             //IWebElement modal = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("(//div[@class='modal-inner-wrap'])[position()=2]")));
 
-            BCHomePage bchp = new BCHomePage(driver);
+            AirIndiaHomePage bchp = new AirIndiaHomePage(driver);
             var searchespage = bchp?.TypeSearchText(searchtext);
             Thread.Sleep(3000);
             Assert.That(searchtext.Contains(searchespage?.GetProductSelect()));

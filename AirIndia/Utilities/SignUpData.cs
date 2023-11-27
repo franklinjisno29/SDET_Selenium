@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BunnyCart.Utilities
+namespace AirIndia.Utilities
 {
     internal class SignUpData
     {

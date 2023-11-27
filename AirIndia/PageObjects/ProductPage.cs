@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BunnyCart.PageObjects
+namespace AirIndia.PageObjects
 {
     internal class ProductPage
     {

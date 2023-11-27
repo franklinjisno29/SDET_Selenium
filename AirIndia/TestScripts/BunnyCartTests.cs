@@ -1,5 +1,5 @@
-﻿using BunnyCart.Utilities;
-using BunnyCart.PageObjects;
+﻿using AirIndia.Utilities;
+using AirIndia.PageObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +10,10 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.DevTools.V117.Debugger;
 using Serilog;
 
-namespace BunnyCart.TestScripts
+namespace AirIndia.TestScripts
 {
     [TestFixture]
-    internal class BunnyCartTests : CoreCodes
+    internal class AirIndiaTests : CoreCodes
     {
         [Test, Order(1), Category("Regression Test")]
 
@@ -101,7 +101,7 @@ namespace BunnyCart.TestScripts
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            BCHomePage bchp = new BCHomePage(driver);
+            AirIndiaHomePage bchp = new AirIndiaHomePage(driver);
             Log.Information("Create Account Test Started");
             bchp.ClickCreateAccountLink();
             Log.Information("Create Account Link is Clicked");

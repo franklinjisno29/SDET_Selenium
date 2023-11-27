@@ -30,4 +30,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExtentReports\" />
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>
