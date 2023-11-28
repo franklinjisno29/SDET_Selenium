@@ -20,22 +20,35 @@ namespace AirIndia.PageObjects
         }
 
         //Arrange
-        [FindsBy(How = How.LinkText, Using = "Water Poppy")]
-        private IWebElement? ProductSelect { get; set; }
+        [FindsBy(How = How.XPath, Using = "//div[contains(@class,'menu-title')]")]
+        private IWebElement? SortSelect { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//button[@id='selectFare'][1]")]
+        private IWebElement? FareSelect { get; set; }
 
         //Act
-        public string? GetProductSelect()
-        {
-            return ProductSelect?.Text;
-        }
+        //public string? GetProductSelect()
+        //{
+        //    return ProductSelect?.Text;
+        //}
         public IWebElement GetProductSelect(string pId)
         {
-            return driver.FindElement(By.XPath("(//div[@data-container='product-grid'])["+pId+"]"));
+            return driver.FindElement(By.XPath("(//button[@type='button' and contains(@class,'flight-card-button')])["+pId+"]"));
         }
-            public ProductPage ClickProduct(string pId)
+            public FlightPage ClickProduct(string pId)
         {
+            SortSelect?.Click();
+            IWebElement sortField = driver.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]"));
+            sortField.Click();
+            Thread.Sleep(2000);
             GetProductSelect(pId)?.Click();
-            return new ProductPage(driver);
+            Thread.Sleep(2000);
+            FareSelect?.Click();
+            Thread.Sleep(2000);
+            IWebElement comfortField = driver.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]"));
+            comfortField.Click();
+            Thread.Sleep(2000);
+            return new FlightPage(driver);
         }
     }
 }

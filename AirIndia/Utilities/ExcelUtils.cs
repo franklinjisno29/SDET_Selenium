@@ -10,9 +10,9 @@ namespace AirIndia.Utilities
 {
     internal class ExcelUtils
     {
-        public static List<SignUpData> ReadSignUpData(string excelFilePath, string sheetName)
+        public static List<SearchFlightData> ReadSearchFlightData(string excelFilePath, string sheetName)
         {
-            List<SignUpData> signUpDataList = new List<SignUpData>();
+            List<SearchFlightData> searchFlightDataList = new List<SearchFlightData>();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             using (var stream = new FileStream(excelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -33,17 +33,26 @@ namespace AirIndia.Utilities
                     {
                         foreach (DataRow row in dataTable.Rows)
                         {
-                            SignUpData signUpData = new SignUpData
+                            SearchFlightData searchFlightData = new SearchFlightData
                             {
-                                FirstName = GetValueOrDefault(row, "firstname"),
-                                LastName = GetValueOrDefault(row, "lastname"),
-                                Email = GetValueOrDefault(row, "email"),
-                                Password = GetValueOrDefault(row, "pwd"),
-                                ConfirmPassword = GetValueOrDefault(row, "conpwd"),
-                                MobileNumber = GetValueOrDefault(row, "mbno")
+                                From = GetValueOrDefault(row, "From"),
+                                To = GetValueOrDefault(row, "To"),
+                                DaySelect = GetValueOrDefault(row, "DaySelect"),
+                                MonthSelect = GetValueOrDefault(row, "MonthSelect"),
+                                YearSelect = GetValueOrDefault(row, "YearSelect"),
+                                Passengers = GetValueOrDefault(row, "Passengers"),
+                                ClassSelect = GetValueOrDefault(row, "ClassSelect"),
+                                ConcessionType = GetValueOrDefault(row, "ConcessionType"),
+                                PId = GetValueOrDefault(row,"Pid"),
+                                FirstName = GetValueOrDefault(row,"FirstName"),
+                                LastName = GetValueOrDefault(row, "LastName"),
+                                Email = GetValueOrDefault(row, "Email"),
+                                ConfirmEmail = GetValueOrDefault(row, "ConfirmEmail"),
+                                CountryCode = GetValueOrDefault(row, "CountryCode"),
+                                MobileNo = GetValueOrDefault(row, "MobileNo")
                             };
 
-                            signUpDataList.Add(signUpData);
+                            searchFlightDataList.Add(searchFlightData);
                         }
                     }
                     else
@@ -53,7 +62,7 @@ namespace AirIndia.Utilities
                 }
             }
 
-            return signUpDataList;
+            return searchFlightDataList;
         }
 
         static string GetValueOrDefault(DataRow row, string columnName)

@@ -21,7 +21,7 @@ namespace AirIndia.PageObjects
         }
 
         //Arrange
-        [FindsBy(How = How.Id, Using = "mat-radio-2-input")]
+        [FindsBy(How = How.XPath, Using = "//mat-radio-button[@id=\"mat-radio-2\"]")]
         private IWebElement? TravelOptions { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//input[@id='From']")]
@@ -30,51 +30,70 @@ namespace AirIndia.PageObjects
         [FindsBy(How = How.XPath, Using = "//input[@id='To']")]
         private IWebElement? ToText { get; set; }
 
-        [FindsBy(How = How.Id, Using = "lastname")]
-        private IWebElement? LastNameText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@type='button']")]
+        private IWebElement? DepartDateSelect { get; set; }
 
-        [FindsBy(How = How.Name, Using = "email")]
-        private IWebElement? EmailText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@type='button']")]
+        private IWebElement? DaySelect { get; set; }
 
-        [FindsBy(How = How.Id, Using = "password")]
-        private IWebElement? PassworText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//select[@title='Select month']")]
+        private IWebElement? MonthSelect { get; set; }
 
-        [FindsBy(How = How.Id, Using = "password-confirmation")]
-        private IWebElement? ConfirmPasswordText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//select[@title='Select year']")]
+        private IWebElement? YearSelect { get; set; }
 
-        [FindsBy(How = How.Id, Using = "mobilenumber")]
-        private IWebElement? MobileNumberText { get; set; }
+        [FindsBy(How = How.Id, Using = "dropdownForm1")]
+        private IWebElement? PassengerCount { get; set; }
 
-        [FindsBy(How = How.XPath, Using = "//button[@title = 'Create an Account']")]
-        private IWebElement? SignUpButton { get; set; }
+        [FindsBy(How = How.Id, Using = "mat-select-value-1")]
+        private IWebElement? ClassSelect { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//mat-select[@id='concession-type']")]
+        private IWebElement? ConcessionTypeSelect { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//button[text()=' SHOW FLIGHTS ']")]
+        private IWebElement? ShowFlightsButton { get; set; }
 
         //Act
-        public void ClickCreateAccountLink()
+        public SearchResultPage SearchFlight(string from, string to, string dayselect, string monthselect, string yearselect, string passengers, string classselect, string concessiontype)
         {
-            CreateAccountLink?.Click();
-        }
-        public void SignUp(string firstname, string lastname, string email, string password, string confirmpassword, string mobileno)
-        {
-            IWebElement modal = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("(//div[@class='modal-inner-wrap'])[position()=2]")));
-            FirstNameText?.SendKeys(firstname);
-            LastNameText?.SendKeys(lastname);
-            EmailText?.SendKeys(email);
-            ScrollIntoView(driver, modal.FindElement(By.Id("password")));
-            PassworText?.SendKeys(password);
-            ConfirmPasswordText?.SendKeys(confirmpassword);
-            ScrollIntoView(driver, modal.FindElement(By.Id("mobilenumber")));
-            MobileNumberText?.SendKeys(mobileno);
-            Thread.Sleep(2000);
-            SignUpButton?.Click();
-        }
-        
-
-        public SearchResultPage TypeSearchText(string searchText)
-        {
-            if(searchText == null)
-                throw new NoSuchElementException(nameof(searchText));
-            SearchText?.SendKeys(searchText);
-            SearchText?.SendKeys(Keys.Enter);
+            //IWebElement modal = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("(//div[@class='modal-inner-wrap'])[position()=2]")));
+            TravelOptions?.Click();
+            FromText?.SendKeys(from);
+            Thread.Sleep(1000);
+            FromText?.SendKeys(Keys.Enter);
+            ToText?.SendKeys(to);
+            Thread.Sleep(1000);
+            ToText?.SendKeys(Keys.Enter);
+            DepartDateSelect?.Click();
+            IWebElement doyField = driver.FindElement(By.XPath("//select[@title='Select year']"));
+            SelectElement selectyear = new SelectElement(doyField);
+            selectyear.SelectByValue(yearselect);
+            Thread.Sleep(1000);
+            IWebElement domField = driver.FindElement(By.XPath("//select[@title='Select month']"));
+            SelectElement selectmonth = new SelectElement(domField);
+            selectmonth.SelectByValue(monthselect);
+            Thread.Sleep(1000);
+            IWebElement dayField = driver.FindElement(By.XPath("//span[contains(text(),'"+dayselect+"')]"));
+            dayField.Click();
+            Thread.Sleep(1000);
+            PassengerCount?.Click();
+            Thread.Sleep(1000);
+            IWebElement? passengercount = driver.FindElement(By.XPath("//div[contains(@class,'plus-minus-holder')]//following::button"));
+            int passenger = Convert.ToInt32(passengers);
+            for(int i=1;i<passenger;i++)
+                passengercount.Click();
+            Thread.Sleep(1000);
+            ClassSelect?.Click();
+            IWebElement classField = driver.FindElement(By.XPath("//span[text()='"+classselect+"' and @class='mat-option-text']"));
+            classField.Click();
+            Thread.Sleep(1000);
+            ConcessionTypeSelect?.Click();
+            IWebElement concessionField = driver.FindElement(By.XPath("//span[contains(text(),'"+concessiontype+"') and @class='mat-option-text']"));
+            concessionField.Click();
+            Thread.Sleep(1000);
+            ShowFlightsButton?.Click();
+            Thread.Sleep(30000);
             return new SearchResultPage(driver);
         }
     }
