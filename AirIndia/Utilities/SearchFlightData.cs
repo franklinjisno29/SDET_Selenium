@@ -23,5 +23,8 @@ namespace AirIndia.Utilities
         public string? ConfirmEmail { get; set; }
         public string? CountryCode { get; set; }
         public string? MobileNo { get; set; }
+        public string? DOBday { get; set; }
+        public string? DOBmonth { get; set; }
+        public string? DOByear { get; set; }
     }
 }

@@ -1,5 +1,8 @@
-﻿using OpenQA.Selenium;
+﻿using AirIndia.Utilities;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class CartPage
+    internal class CartPage : CoreCodes
     {
         IWebDriver driver;
         public CartPage(IWebDriver? driver)
@@ -19,10 +22,9 @@ namespace AirIndia.PageObjects
         [FindsBy(How = How.XPath, Using = "//button[contains(@class,'next-step-button')]")]
         private IWebElement? CheckOutButton { get; set; }
 
-        public PaymentPage ClickCheckOutButton()
+        public void ClickCheckOutButton()
         {
             CheckOutButton?.Click();
-            return new PaymentPage(driver);
         }
     }
 }

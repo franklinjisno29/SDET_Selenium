@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V117.DOM;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,10 +55,26 @@ namespace AirIndia.PageObjects
         [FindsBy(How = How.XPath, Using = "//button[text()=' SHOW FLIGHTS ']")]
         private IWebElement? ShowFlightsButton { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//div[@id='signIn']")]
+        private IWebElement? SignInButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "(//div[@class='mat-tab-label-content'])[4]")]
+        private IWebElement? FlightStatusButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "(//input[@name='flight-number-ip'])")]
+        private IWebElement? FlightNumberText { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//div[@id='mat-select-value-3']")]
+        private IWebElement? DateText { get; set; }
+        [FindsBy(How = How.XPath, Using = "//div[@class='floating-chat-bot-outer-wrapper']")]
+        private IWebElement? ChatBotButton { get; set; }
+
+      
+
         //Act
         public SearchResultPage SearchFlight(string from, string to, string dayselect, string monthselect, string yearselect, string passengers, string classselect, string concessiontype)
         {
-            //IWebElement modal = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("(//div[@class='modal-inner-wrap'])[position()=2]")));
+            var fluentWait = Waits(driver);
             TravelOptions?.Click();
             FromText?.SendKeys(from);
             Thread.Sleep(1000);
@@ -66,35 +83,72 @@ namespace AirIndia.PageObjects
             Thread.Sleep(1000);
             ToText?.SendKeys(Keys.Enter);
             DepartDateSelect?.Click();
-            IWebElement doyField = driver.FindElement(By.XPath("//select[@title='Select year']"));
+            IWebElement doyField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
             SelectElement selectyear = new SelectElement(doyField);
             selectyear.SelectByValue(yearselect);
-            Thread.Sleep(1000);
-            IWebElement domField = driver.FindElement(By.XPath("//select[@title='Select month']"));
+            IWebElement domField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
             SelectElement selectmonth = new SelectElement(domField);
             selectmonth.SelectByValue(monthselect);
             Thread.Sleep(1000);
-            IWebElement dayField = driver.FindElement(By.XPath("//span[contains(text(),'"+dayselect+"')]"));
+            IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'"+dayselect+"')]")));
             dayField.Click();
-            Thread.Sleep(1000);
             PassengerCount?.Click();
-            Thread.Sleep(1000);
-            IWebElement? passengercount = driver.FindElement(By.XPath("//div[contains(@class,'plus-minus-holder')]//following::button"));
+            IWebElement? passengercount = fluentWait.Until(d => d.FindElement(By.XPath("//div[contains(@class,'plus-minus-holder')]//following::button")));
             int passenger = Convert.ToInt32(passengers);
             for(int i=1;i<passenger;i++)
                 passengercount.Click();
-            Thread.Sleep(1000);
             ClassSelect?.Click();
-            IWebElement classField = driver.FindElement(By.XPath("//span[text()='"+classselect+"' and @class='mat-option-text']"));
+            IWebElement classField = fluentWait.Until(d => d.FindElement(By.XPath("//span[text()='"+classselect+"' and @class='mat-option-text']")));
             classField.Click();
             Thread.Sleep(1000);
             ConcessionTypeSelect?.Click();
-            IWebElement concessionField = driver.FindElement(By.XPath("//span[contains(text(),'"+concessiontype+"') and @class='mat-option-text']"));
+            IWebElement concessionField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'"+concessiontype+"') and @class='mat-option-text']")));
             concessionField.Click();
-            Thread.Sleep(1000);
             ShowFlightsButton?.Click();
             Thread.Sleep(30000);
             return new SearchResultPage(driver);
+        }
+        public SignInPage ClickSignIn()
+        {
+            var fluentWait = Waits(driver);
+            SignInButton?.Click();
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("createAccountButton")));
+            return new SignInPage(driver);
+        }
+        
+        public void ClickFlightStatus()
+        {
+            var fluentWait = Waits(driver);
+            FlightStatusButton?.Click();
+            FlightNumberText?.SendKeys("692");
+            DateText?.Click();
+            Thread.Sleep(1000);
+            IWebElement dateField = fluentWait.Until(d => d.FindElement(By.XPath("(//span[@class='mat-option-text'])[5]")));
+            dateField.Click();
+            ShowFlightsButton?.Click();
+        }
+
+        public void ClickChatBot()
+        {
+            var fluentWait = Waits(driver);
+            ChatBotButton?.Click();
+            IWebElement FSbutton = fluentWait.Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[4]")));
+            FSbutton?.Click();
+            IWebElement FNbutton = fluentWait.Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[1]")));
+            FNbutton?.Click();
+            IWebElement FNtype = fluentWait.Until(d => d.FindElement(By.Id("inputChat")));
+            FNtype?.SendKeys("AI692");
+            FNtype?.SendKeys(Keys.Enter);
+            IWebElement doyField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
+            SelectElement selectyear = new SelectElement(doyField);
+            selectyear.SelectByValue("2023");
+            IWebElement domField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
+            SelectElement selectmonth = new SelectElement(domField);
+            selectmonth.SelectByValue("12");
+            Thread.Sleep(1000);
+            IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//div[@class='ngb-dp-day' and contains(@aria-label,'10')]")));
+            dayField.Click();
+            Thread.Sleep(5000);
         }
     }
 }

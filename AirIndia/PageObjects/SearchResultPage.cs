@@ -1,6 +1,8 @@
 ﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,20 +37,18 @@ namespace AirIndia.PageObjects
         {
             return driver.FindElement(By.XPath("(//button[@type='button' and contains(@class,'flight-card-button')])["+pId+"]"));
         }
-            public FlightPage ClickProduct(string pId)
+        public FlightPage ClickProduct(string pId)
         {
+            var fluentWait = Waits(driver);
             SortSelect?.Click();
-            IWebElement sortField = driver.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]"));
+            IWebElement sortField = fluentWait.Until(d => d.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]")));
             sortField.Click();
-            Thread.Sleep(2000);
             GetProductSelect(pId)?.Click();
-            Thread.Sleep(2000);
             FareSelect?.Click();
-            Thread.Sleep(2000);
-            IWebElement comfortField = driver.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]"));
+            IWebElement comfortField = fluentWait.Until(d => d.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]")));
             comfortField.Click();
-            Thread.Sleep(2000);
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'passenger details')]")));
             return new FlightPage(driver);
-        }
+            }
     }
 }

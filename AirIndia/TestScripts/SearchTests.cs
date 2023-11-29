@@ -13,14 +13,10 @@ namespace AirIndia.TestScripts
 {
     internal class SearchTests : CoreCodes
     {
-        [Test]
+        [Test, Category("Regression Test")]
         public void SearchFlightTest()
         {
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
-            fluentWait.Timeout = TimeSpan.FromSeconds(5);
-            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(50);
-            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-            fluentWait.Message = "element not found";
+            var fluentWait = Waits(driver);
             string? currDir = Directory.GetParent(@"../../../").FullName;
             string? logfilePath = currDir + "/Logs/log_" + DateTime.Now.ToString("yyyy.mm.dd_HH.mm.ss") + ".txt";
             Log.Logger = new LoggerConfiguration()
@@ -39,57 +35,61 @@ namespace AirIndia.TestScripts
 
             foreach (var searchFlightData in searchFlightDataList)
             {
+                try
+                {
+                    string? from = searchFlightData?.From;
+                    string? to = searchFlightData?.To;
+                    string? dayselect = searchFlightData?.DaySelect;
+                    string? monthselect = searchFlightData?.MonthSelect;
+                    string? yearselect = searchFlightData?.YearSelect;
+                    string? passengers = searchFlightData?.Passengers;
+                    string? classselect = searchFlightData?.ClassSelect;
+                    string? concessiontype = searchFlightData?.ConcessionType;
+                    string? pId = searchFlightData?.PId;
+                    string? firstName = searchFlightData?.FirstName;
+                    string? lastName = searchFlightData?.LastName;
+                    string? email = searchFlightData?.Email;
+                    string? confirmEmail = searchFlightData?.ConfirmEmail;
+                    string? countryCode = searchFlightData?.CountryCode;
+                    string? mobileNo = searchFlightData?.MobileNo;
 
-                string? from = searchFlightData?.From;
-                string? to = searchFlightData?.To;
-                string? dayselect = searchFlightData?.DaySelect;
-                string? monthselect = searchFlightData?.MonthSelect;
-                string? yearselect = searchFlightData?.YearSelect;
-                string? passengers = searchFlightData?.Passengers;
-                string? classselect = searchFlightData?.ClassSelect;
-                string? concessiontype = searchFlightData?.ConcessionType;
-                string? pId = searchFlightData?.PId;
-                string? firstName = searchFlightData?.FirstName;
-                string? lastName = searchFlightData?.LastName;
-                string? email = searchFlightData?.Email;
-                string? confirmEmail = searchFlightData?.ConfirmEmail;
-                string? countryCode = searchFlightData?.CountryCode;
-                string? mobileNo = searchFlightData?.MobileNo;
-
-                Console.WriteLine($"From: {from} - To: {to}, DepartDate: {dayselect}/{monthselect}/{yearselect}, Passengers: {passengers}, Class: {classselect}, Concession Type: {concessiontype}");
+                    Console.WriteLine($"From: {from} - To: {to}, DepartDate: {dayselect}/{monthselect}/{yearselect}, Passengers: {passengers}, Class: {classselect}, Concession Type: {concessiontype}");
 
 
-                var searchpage = fluentWait.Until(d => bchp.SearchFlight(from, to, dayselect, monthselect, yearselect, passengers, classselect, concessiontype));
-                
-                var flightpage = fluentWait.Until(d => searchpage.ClickProduct(pId));
-                
-                var travelerpage = fluentWait.Until(d => flightpage.ClickPassengerDetails());
-                
-                var cartpage = fluentWait.Until(d => travelerpage.FillPassengerDetails(firstName,lastName,email,confirmEmail,countryCode,mobileNo));
+                    var searchpage = fluentWait.Until(d => bchp.SearchFlight(from, to, dayselect, monthselect, yearselect, passengers, classselect, concessiontype));
+                    Log.Information("Flight Searched");
+                    TakeScreenshot();
+                    Assert.That(driver.Url, Does.Contain("availability"));
 
-                var paymentpage = fluentWait.Until(d => cartpage.ClickCheckOutButton());
+                    var flightpage = fluentWait.Until(d => searchpage.ClickProduct(pId));
+                    Log.Information("Selected Flight");
+                    TakeScreenshot();
+                    Assert.That(driver.Url, Does.Contain("shopping-cart"));
 
-                paymentpage.CheckOutProcess();
+                    var travelerpage = fluentWait.Until(d => flightpage.ClickPassengerDetails());
+                    Log.Information("Clicked Fill Passenger Details");
+                    TakeScreenshot();
+                    Assert.That(driver.Url, Does.Contain("traveler"));
 
-                
-                //    try
-                //{
-                //    Assert.IsTrue(driver?.FindElement(By.XPath("//div[" +
-                //       "@class='modal-inner-wrap']//following::h1[2]")).Text == "Create an Account", $"Test failed for Create Account");
-                //    LogTestResult("Create Account Link Test", "Create Account Link Success");
-                //}
-                //catch (AssertionException ex)
-                //{
-                //    LogTestResult("Create Account Link Test", "Create Account Link Failed", ex.Message);
-                //}
+                    var cartpage = fluentWait.Until(d => travelerpage.FillPassengerDetails(firstName, lastName, email, confirmEmail, countryCode, mobileNo));
+                    Log.Information("Passenger Details Filled");
+                    TakeScreenshot();
+                    Assert.That(driver.Url, Does.Contain("shopping-cart"));
+                    Thread.Sleep(15000);
 
-                //    // Assert.That(""."")
-
-                //}
-                //Log.CloseAndFlush();
-
+                    fluentWait.Until(d => cartpage);
+                    cartpage.ClickCheckOutButton();
+                    LogTestResult("Book a Flight", "Book a Flight Success");
+                    test = extent.CreateTest("Book a Flight - Passed");
+                    test.Pass("Book a Flight Success");
+                }
+                catch(AssertionException ex)
+                {
+                    TakeScreenshot();
+                    LogTestResult("Book a Flight", "Book a Flight Failed", ex.Message);
+                    test.Fail("Book a Flight Failed");
+                }
             }
-
         }
     }
 }

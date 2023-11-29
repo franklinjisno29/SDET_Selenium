@@ -49,7 +49,10 @@ namespace AirIndia.Utilities
                                 Email = GetValueOrDefault(row, "Email"),
                                 ConfirmEmail = GetValueOrDefault(row, "ConfirmEmail"),
                                 CountryCode = GetValueOrDefault(row, "CountryCode"),
-                                MobileNo = GetValueOrDefault(row, "MobileNo")
+                                MobileNo = GetValueOrDefault(row, "MobileNo"),
+                                DOBday = GetValueOrDefault(row, "DOBd"),
+                                DOBmonth = GetValueOrDefault(row, "DOBm"),
+                                DOByear = GetValueOrDefault(row, "DOBy")
                             };
 
                             searchFlightDataList.Add(searchFlightData);

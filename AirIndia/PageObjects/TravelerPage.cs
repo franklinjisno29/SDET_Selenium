@@ -1,5 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using AirIndia.Utilities;
+using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class TravelerPage
+    internal class TravelerPage : CoreCodes
     {
         IWebDriver driver;
         public TravelerPage(IWebDriver? driver)
@@ -46,30 +48,24 @@ namespace AirIndia.PageObjects
         //Act
         public CartPage FillPassengerDetails(string firstName, string lastName, string email, string confirmEmail, string countryCode, string mobileNo)
         {
+            var fluentWait = Waits(driver);
             FirstNameText?.Click();
             FirstNameText?.SendKeys(firstName);
-            Thread.Sleep(1000);
             LastNameText?.Click();
             LastNameText?.SendKeys(lastName);
-            Thread.Sleep(1000);
             EmailText?.Click();
             EmailText?.SendKeys(email);
-            Thread.Sleep(1000);
             ConfirmEmailText?.Click();
             ConfirmEmailText?.SendKeys(confirmEmail);
-            Thread.Sleep(1000);
             CountryCodesText?.Click();
             CountryCodesText?.SendKeys(countryCode);
-            Thread.Sleep(1000);
-            IWebElement countrycodeField = driver.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]"));
+            IWebElement countrycodeField = fluentWait.Until(d => d.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]")));
             countrycodeField.Click();
-            Thread.Sleep(1000);
             MobileNoText?.Click();
             MobileNoText?.SendKeys(mobileNo);
-            Thread.Sleep(1000);
             CheckboxText?.Click();
-            Thread.Sleep(1000);
             ConfirmButton?.Click();
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(@class,'next-step-button')]")));
             return new CartPage(driver);
         }
     }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using Serilog;
+using OpenQA.Selenium.Support.UI;
 
 namespace AirIndia.Utilities
 {
@@ -64,7 +65,7 @@ namespace AirIndia.Utilities
         {
             driver.Quit();
             extent.Flush();
-
+            Log.CloseAndFlush();
         }
         public bool CheckLinkStatus(string url)
         {
@@ -84,8 +85,12 @@ namespace AirIndia.Utilities
         }
         public static void ScrollIntoView(IWebDriver driver, IWebElement element)
         {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
+            jsExecutor.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+            // Optionally, you can wait for the scroll to complete
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(driver => (bool)jsExecutor.ExecuteScript("return arguments[0].complete", element));
         }
 
         public void LogTestResult(string testName, string result, string errorMessage = null)
@@ -103,7 +108,7 @@ namespace AirIndia.Utilities
                 test.Fail(result);
             }
         }
-        public void TakeScreeshot()
+        public void TakeScreenshot()
         {
             ITakesScreenshot its = (ITakesScreenshot)driver;
             Screenshot screenshot = its.GetScreenshot();
@@ -111,6 +116,15 @@ namespace AirIndia.Utilities
             string filePath = currDir + "/Screenshots/ss_" + DateTime.Now.ToString("yyyy.mm.dd_HH.mm.ss") + ".png";
             screenshot.SaveAsFile(filePath);
             Console.WriteLine("taken screenshot");
+        }
+        public DefaultWait<IWebDriver> Waits(IWebDriver driver)
+        {
+            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
+            fluentWait.Timeout = TimeSpan.FromSeconds(30);
+            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(50);
+            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+            fluentWait.Message = "element not found";
+            return fluentWait;
         }
     }
 }
