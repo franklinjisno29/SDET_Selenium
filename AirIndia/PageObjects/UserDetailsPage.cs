@@ -1,13 +1,17 @@
 ﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V117.Page;
+using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AirIndia.PageObjects
 {
@@ -41,11 +45,15 @@ namespace AirIndia.PageObjects
             TitleText?.Click();
             SelectElement title = new SelectElement(TitleText);
             title.SelectByValue("MR");
+            IWebElement element = driver.FindElement(By.Id("continueBtn"));
+            driver.ExecuteJavaScript("arguments[0].scrollIntoView();", element);
             FirstNameText?.Click();
             FirstNameText?.SendKeys(firstName);
             LastNameText?.Click();
             LastNameText?.SendKeys(lastName);
+            Thread.Sleep(3000);
             DOBText?.Click();
+            Thread.Sleep(3000);
             IWebElement cField = fluentWait.Until(d => d.FindElement(By.XPath("//button[contains(@class,'prev-button')]")));
             for (int i=0;i<3;i++)
                 cField?.Click();
@@ -55,7 +63,19 @@ namespace AirIndia.PageObjects
             domField?.Click();
             IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dobday + "')]")));
             dayField.Click();
+            
             ContinueButton?.Click();
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("email_label")));
+
+        }
+
+        public void ClickContinue()
+        {
+            var fluentWait = Waits(driver);
+            Thread.Sleep(2000);
+            ContinueButton?.Click();
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
+
         }
     }
 }

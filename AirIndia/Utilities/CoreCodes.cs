@@ -121,7 +121,7 @@ namespace AirIndia.Utilities
         {
             DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
             fluentWait.Timeout = TimeSpan.FromSeconds(30);
-            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(50);
+            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(150);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
             fluentWait.Message = "element not found";
             return fluentWait;
