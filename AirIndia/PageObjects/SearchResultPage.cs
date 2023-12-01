@@ -15,10 +15,15 @@ namespace AirIndia.PageObjects
     internal class SearchResultPage
     {
         IWebDriver driver;
+        DefaultWait<IWebDriver> wait;
         public SearchResultPage(IWebDriver driver)
         {
             this.driver = driver ?? throw new ArgumentException(nameof(driver));
             PageFactory.InitElements(driver, this);
+            wait = new DefaultWait<IWebDriver>(driver);
+            wait.PollingInterval = TimeSpan.FromMilliseconds(100);
+            wait.Timeout = TimeSpan.FromSeconds(10);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
         }
 
         //Arrange
@@ -29,10 +34,6 @@ namespace AirIndia.PageObjects
         private IWebElement? FareSelect { get; set; }
 
         //Act
-        //public string? GetProductSelect()
-        //{
-        //    return ProductSelect?.Text;
-        //}
         public IWebElement GetProductSelect(string pId)
         {
             return driver.FindElement(By.XPath("(//button[@type='button' and contains(@class,'flight-card-button')])["+pId+"]"));
@@ -40,13 +41,13 @@ namespace AirIndia.PageObjects
         public FlightPage ClickProduct(string pId)
         {
             SortSelect?.Click();
-            IWebElement sortField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]")));
+            IWebElement sortField = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]")));
             sortField.Click();
             GetProductSelect(pId)?.Click();
             FareSelect?.Click();
-            IWebElement comfortField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]")));
+            IWebElement comfortField = wait.Until(d => d.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]")));
             comfortField.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'passenger details')]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'passenger details')]")));
             return new FlightPage(driver);
             }
     }

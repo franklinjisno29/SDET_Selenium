@@ -1,5 +1,6 @@
 ﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using SeleniumExtras.WaitHelpers;
 using System;
@@ -13,10 +14,16 @@ namespace AirIndia.PageObjects
     internal class TravelerPage
     {
         IWebDriver driver;
+        DefaultWait<IWebDriver> wait;
+
         public TravelerPage(IWebDriver? driver)
         {
             this.driver = driver ?? throw new ArgumentException(nameof(driver)); ;
             PageFactory.InitElements(driver, this);
+            wait = new DefaultWait<IWebDriver>(driver);
+            wait.PollingInterval = TimeSpan.FromMilliseconds(100);
+            wait.Timeout = TimeSpan.FromSeconds(10);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
         }
 
         //Arrange
@@ -58,13 +65,13 @@ namespace AirIndia.PageObjects
             ConfirmEmailText?.SendKeys(confirmEmail);
             CountryCodesText?.Click();
             CountryCodesText?.SendKeys(countryCode);
-            IWebElement countrycodeField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]")));
+            IWebElement countrycodeField = wait.Until(d => d.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]")));
             countrycodeField.Click();
             MobileNoText?.Click();
             MobileNoText?.SendKeys(mobileNo);
             CheckboxText?.Click();
             ConfirmButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(@class,'next-step-button')]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(@class,'next-step-button')]")));
             return new CartPage(driver);
         }
     }

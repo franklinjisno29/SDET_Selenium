@@ -18,10 +18,15 @@ namespace AirIndia.PageObjects
     internal class UserDetailsPage
     {
         IWebDriver driver;
+        DefaultWait<IWebDriver> wait;
         public UserDetailsPage(IWebDriver? driver)
         {
             this.driver = driver ?? throw new ArgumentException(nameof(driver));//if the driver is null exception thrown
             PageFactory.InitElements(driver, this);//for optimizing the code we write this inside the constructor
+            wait = new DefaultWait<IWebDriver>(driver);
+            wait.PollingInterval = TimeSpan.FromMilliseconds(100);
+            wait.Timeout= TimeSpan.FromSeconds(10);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));  
         }
 
         [FindsBy(How = How.Id, Using = "title")]
@@ -44,35 +49,34 @@ namespace AirIndia.PageObjects
             TitleText?.Click();
             SelectElement title = new SelectElement(TitleText);
             title.SelectByValue("MR");
-            IWebElement element = driver.FindElement(By.Id("continueBtn"));
-            driver.ExecuteJavaScript("arguments[0].scrollIntoView();", element);
+            IWebElement Element = wait.Until(ExpectedConditions.ElementToBeClickable(ContinueButton));
+            driver.ExecuteJavaScript("arguments[0].scrollIntoView();", Element);
             FirstNameText?.Click();
             FirstNameText?.SendKeys(firstName);
             LastNameText?.Click();
             LastNameText?.SendKeys(lastName);
-            Thread.Sleep(3000);
+            wait.Until(d => ExpectedConditions.ElementToBeClickable(DOBText));
             DOBText?.Click();
-            Thread.Sleep(3000);
-            IWebElement cField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//button[contains(@class,'prev-button')]")));
+            IWebElement cField = wait.Until(d => d.FindElement(By.XPath("//button[contains(@class,'prev-button')]")));
             for (int i=0;i<3;i++)
                 cField?.Click();
-            IWebElement dodField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[text()='"+dobyear+"']")));
+            IWebElement dodField = wait.Until(d => d.FindElement(By.XPath("//span[text()='"+dobyear+"']")));
             dodField.Click();
-            IWebElement domField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[text()='"+dobmonth+"']")));
+            IWebElement domField = wait.Until(d => d.FindElement(By.XPath("//span[text()='"+dobmonth+"']")));
             domField?.Click();
-            IWebElement dayField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dobday + "')]")));
+            IWebElement dayField = wait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dobday + "')]")));
             dayField.Click();
             
             ContinueButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.Id("email_label")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("email_label")));
 
         }
 
         public void ClickContinue()
         {
-            Thread.Sleep(2000);
+            wait.Until(d => ExpectedConditions.ElementToBeClickable(ContinueButton));
             ContinueButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
 
         }
     }

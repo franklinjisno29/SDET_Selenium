@@ -1,5 +1,6 @@
 ﻿using AirIndia.Utilities;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using SeleniumExtras.WaitHelpers;
 using System;
@@ -13,10 +14,16 @@ namespace AirIndia.PageObjects
     internal class SignInPage
     {
         IWebDriver driver;
+        DefaultWait<IWebDriver> wait;
+
         public SignInPage(IWebDriver? driver)
         {
             this.driver = driver ?? throw new ArgumentException(nameof(driver));//if the driver is null exception thrown
             PageFactory.InitElements(driver, this);//for optimizing the code we write this inside the constructor
+            wait = new DefaultWait<IWebDriver>(driver);
+            wait.PollingInterval = TimeSpan.FromMilliseconds(100);
+            wait.Timeout = TimeSpan.FromSeconds(10);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
         }
 
         [FindsBy(How = How.Id, Using = "createAccountButton")]
@@ -34,19 +41,19 @@ namespace AirIndia.PageObjects
         public UserDetailsPage ClickJoinNow()
         {
             JoinNowButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.Id("title")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("title")));
             return new UserDetailsPage(driver);
         }
         public void ClickSignIn()
         {
             SignInButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
         }
         public void ClickSignInEmail()
         {
             EmailText?.SendKeys("frank@gmail.com");
             SignInButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
         }
 
         public void ClickSignInEmailPassword()
@@ -54,7 +61,7 @@ namespace AirIndia.PageObjects
             EmailText?.SendKeys("frank@gmail.com");
             PasswordText?.SendKeys("1234");
             SignInButton?.Click();
-            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'recognize')]")));
+            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'recognize')]")));
         }
     }
 }
