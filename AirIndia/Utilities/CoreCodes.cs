@@ -117,7 +117,7 @@ namespace AirIndia.Utilities
             screenshot.SaveAsFile(filePath);
             Console.WriteLine("taken screenshot");
         }
-        public DefaultWait<IWebDriver> Waits(IWebDriver driver)
+        public static DefaultWait<IWebDriver> Waits(IWebDriver driver)
         {
             DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
             fluentWait.Timeout = TimeSpan.FromSeconds(30);

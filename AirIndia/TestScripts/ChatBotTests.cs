@@ -1,6 +1,7 @@
 ﻿using AirIndia.PageObjects;
 using AirIndia.Utilities;
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,10 @@ namespace AirIndia.TestScripts
 
             AirIndiaHomePage bchp = new AirIndiaHomePage(driver);
             Log.Information("Chat Bot Test Started");
-            Thread.Sleep(2000);
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='floating-chat-bot-outer-wrapper']")));
 
-                try
-                {
+            try
+            {
                     fluentWait.Until(d => bchp);
                     bchp.ClickChatBot();
                     IWebElement num = driver.FindElement(By.XPath("//div[@class='flight-number']"));

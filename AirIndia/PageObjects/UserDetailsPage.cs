@@ -15,7 +15,7 @@ using System.Xml.Linq;
 
 namespace AirIndia.PageObjects
 {
-    internal class UserDetailsPage: CoreCodes
+    internal class UserDetailsPage
     {
         IWebDriver driver;
         public UserDetailsPage(IWebDriver? driver)
@@ -41,7 +41,6 @@ namespace AirIndia.PageObjects
 
         public void FillSignUp(string? firstName, string? lastName, string? dobday, string? dobmonth, string? dobyear)
         {
-            var fluentWait = Waits(driver);
             TitleText?.Click();
             SelectElement title = new SelectElement(TitleText);
             title.SelectByValue("MR");
@@ -54,27 +53,26 @@ namespace AirIndia.PageObjects
             Thread.Sleep(3000);
             DOBText?.Click();
             Thread.Sleep(3000);
-            IWebElement cField = fluentWait.Until(d => d.FindElement(By.XPath("//button[contains(@class,'prev-button')]")));
+            IWebElement cField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//button[contains(@class,'prev-button')]")));
             for (int i=0;i<3;i++)
                 cField?.Click();
-            IWebElement dodField = fluentWait.Until(d => d.FindElement(By.XPath("//span[text()='"+dobyear+"']")));
+            IWebElement dodField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[text()='"+dobyear+"']")));
             dodField.Click();
-            IWebElement domField = fluentWait.Until(d => d.FindElement(By.XPath("//span[text()='"+dobmonth+"']")));
+            IWebElement domField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[text()='"+dobmonth+"']")));
             domField?.Click();
-            IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dobday + "')]")));
+            IWebElement dayField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dobday + "')]")));
             dayField.Click();
             
             ContinueButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("email_label")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.Id("email_label")));
 
         }
 
         public void ClickContinue()
         {
-            var fluentWait = Waits(driver);
             Thread.Sleep(2000);
             ContinueButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
 
         }
     }

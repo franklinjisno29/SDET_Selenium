@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class AirIndiaHomePage : CoreCodes
+    internal class AirIndiaHomePage
     {
         IWebDriver driver;
         public AirIndiaHomePage(IWebDriver? driver)
@@ -33,15 +33,6 @@ namespace AirIndia.PageObjects
 
         [FindsBy(How = How.XPath, Using = "//input[@type='button']")]
         private IWebElement? DepartDateSelect { get; set; }
-
-        [FindsBy(How = How.XPath, Using = "//input[@type='button']")]
-        private IWebElement? DaySelect { get; set; }
-
-        [FindsBy(How = How.XPath, Using = "//select[@title='Select month']")]
-        private IWebElement? MonthSelect { get; set; }
-
-        [FindsBy(How = How.XPath, Using = "//select[@title='Select year']")]
-        private IWebElement? YearSelect { get; set; }
 
         [FindsBy(How = How.Id, Using = "dropdownForm1")]
         private IWebElement? PassengerCount { get; set; }
@@ -73,12 +64,14 @@ namespace AirIndia.PageObjects
         [FindsBy(How = How.XPath, Using = "//a[@id='header0menu0link3']")]
         private IWebElement? OffersButton { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//img[@title='Air India Logo']")]
+        private IWebElement? LogoButton { get; set; }
+
 
 
         //Act
         public SearchResultPage SearchFlight(string from, string to, string dayselect, string monthselect, string yearselect, string passengers, string classselect, string concessiontype)
         {
-            var fluentWait = Waits(driver);
             TravelOptions?.Click();
             FromText?.SendKeys(from);
             Thread.Sleep(1000);
@@ -87,107 +80,104 @@ namespace AirIndia.PageObjects
             Thread.Sleep(1000);
             ToText?.SendKeys(Keys.Enter);
             DepartDateSelect?.Click();
-            IWebElement doyField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
+            IWebElement doyField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
             SelectElement selectyear = new SelectElement(doyField);
             selectyear.SelectByValue(yearselect);
-            IWebElement domField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
+            IWebElement domField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
             SelectElement selectmonth = new SelectElement(domField);
             selectmonth.SelectByValue(monthselect);
             Thread.Sleep(1000);
-            IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dayselect + "')]")));
+            IWebElement dayField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + dayselect + "')]")));
             dayField.Click();
             PassengerCount?.Click();
-            IWebElement? passengercount = fluentWait.Until(d => d.FindElement(By.XPath("//div[contains(@class,'plus-minus-holder')]//following::button")));
+            IWebElement? passengercount = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//div[contains(@class,'plus-minus-holder')]//following::button")));
             int passenger = Convert.ToInt32(passengers);
             for (int i = 1; i < passenger; i++)
                 passengercount.Click();
             ClassSelect?.Click();
-            IWebElement classField = fluentWait.Until(d => d.FindElement(By.XPath("//span[text()='" + classselect + "' and @class='mat-option-text']")));
+            IWebElement classField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[text()='" + classselect + "' and @class='mat-option-text']")));
             classField.Click();
             Thread.Sleep(1000);
             ConcessionTypeSelect?.Click();
-            IWebElement concessionField = fluentWait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + concessiontype + "') and @class='mat-option-text']")));
+            IWebElement concessionField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + concessiontype + "') and @class='mat-option-text']")));
             concessionField.Click();
             ShowFlightsButton?.Click();
             Thread.Sleep(30000);
             return new SearchResultPage(driver);
         }
 
-        public void ClickSearchButton()
-        {
-            ShowFlightsButton?.Click();
-        }
         public SignInPage ClickSignIn()
         {
-            var fluentWait = Waits(driver);
             SignInButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("createAccountButton")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.Id("createAccountButton")));
             return new SignInPage(driver);
         }
 
         public void ClickFlightStatus()
         {
-            var fluentWait = Waits(driver);
             FlightStatusButton?.Click();
             FlightNumberText?.SendKeys("692");
             DateText?.Click();
             Thread.Sleep(1000);
-            IWebElement dateField = fluentWait.Until(d => d.FindElement(By.XPath("(//span[@class='mat-option-text'])[5]")));
+            IWebElement dateField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//span[@class='mat-option-text'])[5]")));
             dateField.Click();
             ShowFlightsButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(@class,'ontime-check-state')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(@class,'ontime-check-state')]")));
         }
 
         public void ClickFlightStatusInvalid()
         {
-            var fluentWait = Waits(driver);
             FlightStatusButton?.Click();
             FlightNumberText?.SendKeys("123");
             DateText?.Click();
             Thread.Sleep(1000);
-            IWebElement dateField = fluentWait.Until(d => d.FindElement(By.XPath("(//span[@class='mat-option-text'])[5]")));
+            IWebElement dateField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//span[@class='mat-option-text'])[5]")));
             dateField.Click();
             ShowFlightsButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//h3[@class='error-message-part-subHeading']")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//h3[@class='error-message-part-subHeading']")));
         }
 
         public void ClickChatBot()
         {
-            var fluentWait = Waits(driver);
             ChatBotButton?.Click();
-            IWebElement FSbutton = fluentWait.Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[4]")));
+            IWebElement FSbutton = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[4]")));
             FSbutton?.Click();
-            IWebElement FNbutton = fluentWait.Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[1]")));
+            IWebElement FNbutton = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[@class='response-button'])[1]")));
             FNbutton?.Click();
-            IWebElement FNtype = fluentWait.Until(d => d.FindElement(By.Id("inputChat")));
+            Thread.Sleep(4000);
+            IWebElement FNtype = CoreCodes.Waits(driver).Until(d => d.FindElement(By.Id("inputChat")));
             FNtype?.SendKeys("AI692");
             FNtype?.SendKeys(Keys.Enter);
-            IWebElement doyField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
+            IWebElement doyField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//select[@title='Select year']")));
             SelectElement selectyear = new SelectElement(doyField);
             selectyear.SelectByValue("2023");
-            IWebElement domField = fluentWait.Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
+            IWebElement domField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//select[@title='Select month']")));
             SelectElement selectmonth = new SelectElement(domField);
             selectmonth.SelectByValue("12");
             Thread.Sleep(1000);
-            IWebElement dayField = fluentWait.Until(d => d.FindElement(By.XPath("//div[@class='ngb-dp-day' and contains(@aria-label,'10')]")));
+            IWebElement dayField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//div[@class='ngb-dp-day' and contains(@aria-label,'10')]")));
             dayField.Click();
             Thread.Sleep(3000);
         }
 
         public void closebot()
         {
-            var fluentWait = Waits(driver);
-            IWebElement closebutton = fluentWait.Until(d => d.FindElement(By.XPath("//img[@class='closs-icon']")));
+            IWebElement closebutton = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//img[@class='closs-icon']")));
             closebutton?.Click();
-            IWebElement cancelbutton = fluentWait.Until(d => d.FindElement(By.XPath("//button[@class='btn']")));
+            IWebElement cancelbutton = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//button[@class='btn']")));
             cancelbutton?.Click();
         }
 
         public void ClickOffers()
         {
-            var fluentWait = Waits(driver);
             OffersButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@id='first-tab']")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@id='first-tab']")));
+        }
+        
+        public void ClickLogo()
+        {
+            LogoButton?.Click();
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//img[@title='Air India Logo']")));
         }
     }
 }

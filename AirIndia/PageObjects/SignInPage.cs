@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class SignInPage: CoreCodes
+    internal class SignInPage
     {
         IWebDriver driver;
         public SignInPage(IWebDriver? driver)
@@ -33,32 +33,28 @@ namespace AirIndia.PageObjects
 
         public UserDetailsPage ClickJoinNow()
         {
-            var fluentWait = Waits(driver);
             JoinNowButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("title")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.Id("title")));
             return new UserDetailsPage(driver);
         }
         public void ClickSignIn()
         {
-            var fluentWait = Waits(driver);
             SignInButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
         }
         public void ClickSignInEmail()
         {
-            var fluentWait = Waits(driver);
             EmailText?.SendKeys("frank@gmail.com");
             SignInButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'Please fill')]")));
         }
 
         public void ClickSignInEmailPassword()
         {
-            var fluentWait = Waits(driver);
             EmailText?.SendKeys("frank@gmail.com");
             PasswordText?.SendKeys("1234");
             SignInButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'recognize')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[contains(text(),'recognize')]")));
         }
     }
 }

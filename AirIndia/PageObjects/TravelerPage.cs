@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class TravelerPage : CoreCodes
+    internal class TravelerPage
     {
         IWebDriver driver;
         public TravelerPage(IWebDriver? driver)
@@ -48,7 +48,6 @@ namespace AirIndia.PageObjects
         //Act
         public CartPage FillPassengerDetails(string firstName, string lastName, string email, string confirmEmail, string countryCode, string mobileNo)
         {
-            var fluentWait = Waits(driver);
             FirstNameText?.Click();
             FirstNameText?.SendKeys(firstName);
             LastNameText?.Click();
@@ -59,13 +58,13 @@ namespace AirIndia.PageObjects
             ConfirmEmailText?.SendKeys(confirmEmail);
             CountryCodesText?.Click();
             CountryCodesText?.SendKeys(countryCode);
-            IWebElement countrycodeField = fluentWait.Until(d => d.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]")));
+            IWebElement countrycodeField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("//div[contains(@class,'cdk-overlay-pane')]")));
             countrycodeField.Click();
             MobileNoText?.Click();
             MobileNoText?.SendKeys(mobileNo);
             CheckboxText?.Click();
             ConfirmButton?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(@class,'next-step-button')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(@class,'next-step-button')]")));
             return new CartPage(driver);
         }
     }

@@ -24,13 +24,10 @@ namespace AirIndia.TestScripts
                 .WriteTo.Console()
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-                Thread.Sleep(2000);
-
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//img[@title='Air India Logo']")));
             string? excelFilePath = currDir + "/TestData/InputData.xlsx";
             string? sheetName = "SearchFlight";
-
             List<SearchFlightData> searchFlightDataList = ExcelUtils.ReadSearchFlightData(excelFilePath, sheetName);
-
             foreach (var searchFlightData in searchFlightDataList)
             {
                 try
@@ -40,7 +37,6 @@ namespace AirIndia.TestScripts
                     string? dobday = searchFlightData?.DOBday;
                     string? dobmonth = searchFlightData?.DOBmonth;
                     string? dobyear = searchFlightData?.DOByear;
-
                     SignInPage signinpage = new SignInPage(driver);
                     var userDetailsPage = fluentWait.Until(d => signinpage.ClickJoinNow());
                     Log.Information("Join Now Clicked");
@@ -76,10 +72,9 @@ namespace AirIndia.TestScripts
                 .WriteTo.Console()
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-                Thread.Sleep(2000);
-
-                try
-                {
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//img[@title='Air India Logo']")));
+            try
+            {
                     SignInPage signinpage = new SignInPage(driver);
                     var userDetailsPage = fluentWait.Until(d => signinpage.ClickJoinNow());
                     Log.Information("Join Now Clicked");

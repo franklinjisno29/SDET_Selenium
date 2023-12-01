@@ -27,12 +27,10 @@ namespace AirIndia.TestScripts
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             Log.Information("Sign In Invalid Test Started");
-
             try
             {
                 sip.ClickSignIn();
                 Log.Information("Sign In Invalid Tested");
-                TakeScreenshot();
                 IWebElement button = driver.FindElement(By.XPath("//p[contains(text(),'Please fill')]"));
                 string? numtext = button.Text;
                 TakeScreenshot();
@@ -63,12 +61,10 @@ namespace AirIndia.TestScripts
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             Log.Information("Sign In Invalid Test Started");
-
             try
             {
                 sip.ClickSignInEmail();
                 Log.Information("Sign In Invalid Tested");
-                TakeScreenshot();
                 IWebElement button = driver.FindElement(By.XPath("//p[contains(text(),'Please fill')]"));
                 string? numtext = button.Text;
                 TakeScreenshot();
@@ -99,12 +95,10 @@ namespace AirIndia.TestScripts
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             Log.Information("Sign In Invalid Test Started");
-
             try
             {
                 sip.ClickSignInEmailPassword();
                 Log.Information("Sign In Invalid Tested");
-                TakeScreenshot();
                 IWebElement button = driver.FindElement(By.XPath("//p[contains(text(),'recognize')]"));
                 string? numtext = button.Text;
                 TakeScreenshot();

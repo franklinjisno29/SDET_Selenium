@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class SearchResultPage : CoreCodes
+    internal class SearchResultPage
     {
         IWebDriver driver;
         public SearchResultPage(IWebDriver driver)
@@ -39,15 +39,14 @@ namespace AirIndia.PageObjects
         }
         public FlightPage ClickProduct(string pId)
         {
-            var fluentWait = Waits(driver);
             SortSelect?.Click();
-            IWebElement sortField = fluentWait.Until(d => d.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]")));
+            IWebElement sortField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[contains(@role,'menuitem')])[2]")));
             sortField.Click();
             GetProductSelect(pId)?.Click();
             FareSelect?.Click();
-            IWebElement comfortField = fluentWait.Until(d => d.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]")));
+            IWebElement comfortField = CoreCodes.Waits(driver).Until(d => d.FindElement(By.XPath("(//button[contains(@class,'mat-stroked-button')])[5]")));
             comfortField.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'passenger details')]")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//span[contains(text(),'passenger details')]")));
             return new FlightPage(driver);
             }
     }

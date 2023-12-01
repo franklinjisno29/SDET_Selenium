@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class FlightPage : CoreCodes
+    internal class FlightPage
     {
         IWebDriver driver;
         public FlightPage(IWebDriver? driver)
@@ -27,9 +27,8 @@ namespace AirIndia.PageObjects
         //Act
         public TravelerPage ClickPassengerDetails()
         {
-            var fluentWait = Waits(driver);
             PassengerDetails?.Click();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//input[@formcontrolname='firstName']")));
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//input[@formcontrolname='firstName']")));
             return new TravelerPage(driver);
 
         }

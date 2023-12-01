@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AirIndia.PageObjects
 {
-    internal class CartPage : CoreCodes
+    internal class CartPage
     {
         IWebDriver driver;
         public CartPage(IWebDriver? driver)
@@ -25,6 +25,7 @@ namespace AirIndia.PageObjects
         public void ClickCheckOutButton()
         {
             CheckOutButton?.Click();
+            IWebElement pageLoadedElement = CoreCodes.Waits(driver).Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[contains(@class,'payment-checkout')]")));
         }
     }
 }
