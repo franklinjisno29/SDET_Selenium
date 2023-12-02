@@ -80,11 +80,11 @@ namespace AirIndia.PageObjects
         {
             TravelOptions?.Click();
             FromText?.SendKeys(from);
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             FromText?.SendKeys(Keys.Enter);
             ToText?.SendKeys(to);
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             ToText?.SendKeys(Keys.Enter);
             DepartDateSelect?.Click();
@@ -104,12 +104,12 @@ namespace AirIndia.PageObjects
             ClassSelect?.Click();
             IWebElement classField = wait.Until(d => d.FindElement(By.XPath("//span[text()='" + classselect + "' and @class='mat-option-text']")));
             classField.Click();
-            wait.Until(d => ExpectedConditions.ElementToBeClickable(By.XPath("//div[@id='concession-type-panel']")));
+            //Thread.Sleep(1000);
             ConcessionTypeSelect?.Click();
             IWebElement concessionField = wait.Until(d => d.FindElement(By.XPath("//span[contains(text(),'" + concessiontype + "') and @class='mat-option-text']")));
             concessionField.Click();
             ShowFlightsButton?.Click();
-            Thread.Sleep(30000);
+            //Thread.Sleep(30000);
             return new SearchResultPage(driver);
         }
 
@@ -161,7 +161,7 @@ namespace AirIndia.PageObjects
             selectmonth.SelectByValue("12");
             IWebElement dayField = wait.Until(d => d.FindElement(By.XPath("//div[@class='ngb-dp-day' and contains(@aria-label,'10')]")));
             dayField.Click();
-            Thread.Sleep(3000);
+            //Thread.Sleep(3000);
         }
 
         public void closebot()

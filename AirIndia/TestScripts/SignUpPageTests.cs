@@ -24,7 +24,7 @@ namespace AirIndia.TestScripts
                 .WriteTo.Console()
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//img[@title='Air India Logo']")));
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("createAccountButton")));
             string? excelFilePath = currDir + "/TestData/InputData.xlsx";
             string? sheetName = "SearchFlight";
             List<SearchFlightData> searchFlightDataList = ExcelUtils.ReadSearchFlightData(excelFilePath, sheetName);
@@ -72,7 +72,7 @@ namespace AirIndia.TestScripts
                 .WriteTo.Console()
                 .WriteTo.File(logfilePath, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//img[@title='Air India Logo']")));
+            IWebElement pageLoadedElement = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("createAccountButton")));
             try
             {
                     SignInPage signinpage = new SignInPage(driver);

@@ -49,8 +49,9 @@ namespace AirIndia.PageObjects
             TitleText?.Click();
             SelectElement title = new SelectElement(TitleText);
             title.SelectByValue("MR");
-            IWebElement Element = wait.Until(ExpectedConditions.ElementToBeClickable(ContinueButton));
+            IWebElement Element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[text()='Create an account']")));
             driver.ExecuteJavaScript("arguments[0].scrollIntoView();", Element);
+            //Thread.Sleep(2000);
             FirstNameText?.Click();
             FirstNameText?.SendKeys(firstName);
             LastNameText?.Click();
@@ -74,9 +75,11 @@ namespace AirIndia.PageObjects
 
         public void ClickContinue()
         {
-            wait.Until(d => ExpectedConditions.ElementToBeClickable(ContinueButton));
+            IWebElement Element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//p[text()='Create an account']")));
+            driver.ExecuteJavaScript("arguments[0].scrollIntoView();", Element);
+            //Thread.Sleep(2000);
             ContinueButton?.Click();
-            IWebElement pageLoadedElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
+            IWebElement pageLoadedElement1 = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[contains(@class,'itemLevel')])[2]")));
 
         }
     }
